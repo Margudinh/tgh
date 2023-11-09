@@ -1,3 +1,4 @@
+// @ts-ignore
 import data from "./data.csv";
 
 export type Ingredient = {
