@@ -34,6 +34,28 @@ const IngredientsTable = (): JSX.Element => {
     emptyIngredient,
   ]);
 
+  const [excelCopy, setExcelCopy] = useState<boolean>(false);
+
+  const handleExcelCopy = async () => {
+    let ingredientsAsCsv = "";
+
+    for (const ing of selectedIngredients) {
+      const { name, weight, protein, carbs, lipids, kcal } = ing;
+      ingredientsAsCsv +=
+        [name, weight, protein, carbs, lipids, kcal].join("\t") + "\n";
+    }
+
+    navigator.clipboard.writeText(ingredientsAsCsv);
+
+    setExcelCopy(true);
+
+    await new Promise((res, _) => {
+      setTimeout(res, 1 * 1000);
+    });
+
+    setExcelCopy(false);
+  };
+
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -256,6 +278,15 @@ const IngredientsTable = (): JSX.Element => {
         onClick={addIngredient}
       >
         Agregar <FaPlus />
+      </button>
+
+      <div className="py-3"></div>
+
+      <button
+        onClick={handleExcelCopy}
+        className="col-span-8 flex justify-center gap-1 font-bold items-center bg-green-500 text-white border rounded-xl py-[2px] hover:bg-green-700 border-green-500 hover:border-green-700"
+      >
+        {excelCopy ? "Copiado a excel!" : "Copiar a excel"}
       </button>
     </div>
   );
